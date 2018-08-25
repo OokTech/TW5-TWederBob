@@ -1,0 +1,8 @@
+title: $:/plugins/OokTech/TWederBob/readme
+
+! TWederBob
+
+This is a plugin for adding some inter-server communication with Bob wikis.
+Currently it adds one widget: `action-interServerMessage`.
+
+!! action-interServerMessage widget
