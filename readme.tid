@@ -6,3 +6,16 @@ This is a plugin for adding some inter-server communication with Bob wikis.
 Currently it adds one widget: `action-interServerMessage`.
 
 !! action-interServerMessage widget
+
+Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
+
+`<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
+
+!!!Parameters
+
+|!Parameter |!Description |
+|!url |The url of the server. |
+|!filter |The filter that determines the tiddlers to fetch if `requestType` is `fetch` or the tiddlers to send if `requestType` is `push` |
+|!fromWiki |The wiki to pull from if `requestType` is `fetch` |
+|!toWiki |The wiki to push tiddlers to if `requestType` is `push` |
+|!tokenKey |If you push or pull to/from a wiki that isn't public this is the localStorage key used by the login widget used to log into the remote server. |
