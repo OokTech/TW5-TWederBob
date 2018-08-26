@@ -77,7 +77,6 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   xhr.onload = function () {
     // do something to response
     if (this.responseText && this.status == "200") {
-      console.log(this.responseText)
       // handle the response!
       try {
         var responseData = JSON.parse(this.responseText)
@@ -111,7 +110,6 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   }
   postString = JSON.stringify(postString)
   // send request
-  console.log(postString)
   xhr.send('message='+postString);
   return true;
 };
