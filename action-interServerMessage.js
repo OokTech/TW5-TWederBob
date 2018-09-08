@@ -1,5 +1,5 @@
 /*\
-title: $:/plugins/OokTech/Bob/action-interServerMessage.js
+title: $:/plugins/OokTech/TWederBob/action-interServerMessage.js
 type: application/javascript
 module-type: widget
 
@@ -41,6 +41,8 @@ InterServerMessage.prototype.execute = function() {
   this.fromWiki = this.getAttribute('fromWiki', 'RootWiki');
   this.toWiki = this.getAttribute('toWiki', null);
   this.tokenKey = this.getAttribute('tokenKey', null);
+  this.transfromFilter = this.getAttribute('transfromFilter', null);
+  this.pluginName = this.getAttribute('pluginName', null);
 };
 
 /*
@@ -67,6 +69,10 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     self.url += '/api/fetch'
   } else if (this.requestType === 'push') {
     self.url += '/api/push'
+  } else if (this.requestType === 'listPlugins') {
+    self.url += '/api/plugins/list'
+  } else if (this.requestType === 'fetchPlugin') {
+    self.url += '/api/plugins/'+this.pluginName
   }
   // make the xmlhttprequest object
   var xhr = new XMLHttpRequest()
@@ -80,11 +86,26 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
       // handle the response!
       try {
         var responseData = JSON.parse(this.responseText)
-        Object.keys(responseData.tiddlers).forEach(function(title) {
-          responseData.tiddlers[title].fields.modified = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.modified));
+        if (self.requestType === 'fetch') {
+          Object.keys(responseData.tiddlers).forEach(function(title) {
+            // Fix the modified and created fields, otherwise they are just NAN
+            responseData.tiddlers[title].fields.modified = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.modified));
             responseData.tiddlers[title].fields.created = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.created));
-          $tw.wiki.addTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
-        })
+            // If we have a transform filter apply it to the titles
+            if (self.transformFilter) {
+              var transformedTitle = ($tw.wiki.filterTiddlers(self.transformFilter,null,new $tw.Tiddler(responseData.tiddlers[title])) || [""])[0];
+      				if(transformedTitle) {
+      					$tw.wiki.addTiddler(new $tw.Tiddler(tiddler,{title: transformedTitle}));
+      				}
+            } else {
+              $tw.wiki.addTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
+            }
+          })
+        } else if (self.requestType === 'listPlugins') {
+          console.log('Plugin List:', responseData)
+        } else if (self.requestType === 'fetchPlugin') {
+          console.log('Plugin:', responseData)
+        }
       } catch (e) {
         console.log('Can\'t parse response!')
       }
