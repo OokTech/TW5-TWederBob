@@ -5,6 +5,8 @@ title: $:/plugins/OokTech/TWederBob/readme
 This is a plugin for adding some inter-server communication with Bob wikis.
 Currently it adds one widget: `action-interServerMessage`.
 
+To install this plugin you can drag and drop it into a wiki from https://www.ooktech.xyz:8443/Public#%24%3A%2Fplugins%2FOokTech%2FTWederBob
+
 !! action-interServerMessage widget
 
 Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
