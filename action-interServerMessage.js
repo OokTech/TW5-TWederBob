@@ -72,7 +72,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   } else if (this.requestType === 'listPlugins') {
     self.url += '/api/plugins/list'
   } else if (this.requestType === 'fetchPlugin') {
-    self.url += '/api/plugins/'+this.pluginName
+    self.url += '/api/plugins/fetch/'+this.pluginName
   }
   // make the xmlhttprequest object
   var xhr = new XMLHttpRequest()
@@ -102,9 +102,20 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
             }
           })
         } else if (self.requestType === 'listPlugins') {
-          console.log('Plugin List:', responseData)
+          responseData.forEach(function(pluginData) {
+            var fields = {
+              title: '$:/pluginData/Listing/'+pluginData.tiddlerName,
+              name: pluginData.name,
+              description: pluginData.description,
+              tiddler_name: pluginData.tiddlerName,
+              version: pluginData.version,
+              author: pluginData.author,
+              text: pluginData.readme
+            }
+            $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+          })
         } else if (self.requestType === 'fetchPlugin') {
-          console.log('Plugin:', responseData)
+          $tw.wiki.addTiddler(new $tw.Tiddler(responseData))
         }
       } catch (e) {
         console.log('Can\'t parse response!')
