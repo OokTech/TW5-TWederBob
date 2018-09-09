@@ -100,7 +100,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
       					$tw.wiki.addTiddler(new $tw.Tiddler(tiddler,{title: transformedTitle}));
       				}
             } else {
-              $tw.wiki.addTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
+              $tw.wiki.importTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
               var fields = {
                 title: "$:/state/TWederBob/importlist",
                 text: responseData.list
@@ -125,7 +125,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               author: pluginData.author,
               text: pluginData.readme
             }
-            $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+            $tw.wiki.importTiddler(new $tw.Tiddler(fields))
           })
         } else if (self.requestType === 'fetchPlugin') {
           $tw.wiki.addTiddler(new $tw.Tiddler(responseData))
