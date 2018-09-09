@@ -10,7 +10,11 @@ title: $:/plugins/OokTech/TWederBob/PluginListItem
   <div style='display:inline-block;width:30%;'>
     <$button>
       Install
-      <$action-interServerMessage url='https://127.0.0.1:8443' requestType='fetchPlugin' pluginName={{!!name}}/>
+      <$action-interServerMessage
+        url={{$:/state/TWederBob/GetPlugins/SelectedServer}}
+        requestType='fetchPlugin'
+        pluginName={{!!name}}
+      />
     </$button>
   </div>
 </div>
