@@ -67,6 +67,8 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   }
   if (this.requestType === 'fetch') {
     self.url += '/api/fetch'
+  } else if (this.requestType === 'fetchList') {
+    self.url += '/api/fetch/list'
   } else if (this.requestType === 'push') {
     self.url += '/api/push'
   } else if (this.requestType === 'listPlugins') {
@@ -99,8 +101,19 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
       				}
             } else {
               $tw.wiki.addTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
+              var fields = {
+                title: "$:/state/TWederBob/importlist",
+                text: responseData.list
+              }
+              $tw.wiki.addTiddler(new $tw.Tiddler(fields))
             }
           })
+        } else if (self.requestType === 'fetchList') {
+          var fields = {
+            title: "$:/state/TWederBob/importlist",
+            list: $tw.utils.stringifyList(responseData.list)
+          }
+          $tw.wiki.addTiddler(new $tw.Tiddler(fields))
         } else if (self.requestType === 'listPlugins') {
           responseData.forEach(function(pluginData) {
             var fields = {

@@ -17,7 +17,26 @@ Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> req
 
 |!Parameter |!Description |
 |!url |The url of the server. |
+|!requestType |The type of request. See below for details. |
 |!filter |The filter that determines the tiddlers to fetch if `requestType` is `fetch` or the tiddlers to send if `requestType` is `push` |
 |!fromWiki |The wiki to pull from if `requestType` is `fetch` |
 |!toWiki |The wiki to push tiddlers to if `requestType` is `push` |
 |!tokenKey |If you push or pull to/from a wiki that isn't public this is the localStorage key used by the login widget used to log into the remote server. |
+|!transformFilter |This filter is applied to each of the returned tiddler titles. (optional) |
+|!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
+
+!! Request Types
+
+These are the different request types:
+
+|!Request Type |!Description |!Needed Inputs |
+|!fetch |This fetches tiddlers from a Bob server that allows fetching. |`fromWiki`, `filter` |
+|!fetchList |This gives a list of tiddlers that would be imported by fetching with the current filter. |`fromWiki`, `filter` |
+|!fetchPlugin |This fetches a plugin from a server setup as a plugin library | |
+|!listPlugins |This lists the plugins available on a server setup as a plugin library | |
+|!push |This pushes tiddlers to a server setup to accept pushes. |`toWiki`, `filter` |
+
+`fromWiki` and `toWiki` use the name of the wiki that Bob uses, the same thing
+that is listed under the wiki listing. `filter` is used to filter tiddlers, for
+fetching it is used on the wiki tiddlers are fetched from, for pushing it picks
+tiddlers to push from the current wiki.
