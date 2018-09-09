@@ -13,6 +13,8 @@ Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> req
 
 `<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
 
+When fetching a list of fetched tiddlers (or just the list for `fetchList`) is stored in the list field of [[$:/state/TWederBob/importlist]]
+
 !!!Parameters
 
 |!Parameter |!Description |
