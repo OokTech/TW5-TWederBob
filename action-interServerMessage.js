@@ -103,7 +103,9 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               $tw.wiki.importTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
               var fields = {
                 title: "$:/state/TWederBob/importlist",
-                text: $tw.utils.stringifyList(responseData.list)
+                text: JSON.stringify(responseData.info, null, 2),
+                list: $tw.utils.stringifyList(responseData.list),
+                type: 'application/json'
               }
               $tw.wiki.addTiddler(new $tw.Tiddler(fields))
             }
@@ -111,7 +113,9 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
         } else if (self.requestType === 'fetchList') {
           var fields = {
             title: "$:/state/TWederBob/importlist",
-            text: $tw.utils.stringifyList(responseData.list)
+            text: JSON.stringify(responseData.info, null, 2),
+            list: $tw.utils.stringifyList(responseData.list),
+            type: 'application/json'
           }
           $tw.wiki.addTiddler(new $tw.Tiddler(fields))
         } else if (self.requestType === 'listPlugins') {
