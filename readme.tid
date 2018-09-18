@@ -26,17 +26,20 @@ When fetching a list of fetched tiddlers (or just the list for `fetchList`) is s
 |!tokenKey |If you push or pull to/from a wiki that isn't public this is the localStorage key used by the login widget used to log into the remote server. |
 |!transformFilter |This filter is applied to each of the returned tiddler titles. (optional) |
 |!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
+|!fieldList |A space separated list of field names to return if `requestType` is `fetchList` |
 
 !! Request Types
 
-These are the different request types:
+These are the different request types and their inputs:
 
-|!Request Type |!Description |!Needed Inputs |
-|!fetch |This fetches tiddlers from a Bob server that allows fetching. |`fromWiki`, `filter` |
-|!fetchList |This gives a list of tiddlers that would be imported by fetching with the current filter. |`fromWiki`, `filter` |
-|!fetchPlugin |This fetches a plugin from a server setup as a plugin library | |
-|!listPlugins |This lists the plugins available on a server setup as a plugin library | |
-|!push |This pushes tiddlers to a server setup to accept pushes. |`toWiki`, `filter` |
+All requests need a `url` and `requestType`. If you are interacting with a server that requires a login you also need to set the `tokenKey`
+
+|!Request Type |!Description |!Needed Inputs |!Optional Inputs |
+|!fetch |This fetches tiddlers from a Bob server that allows fetching. |`fromWiki`, `filter` |`transformFilter`, `tokenKey` |
+|!fetchList |This gives a list of tiddlers that would be imported by fetching with the current filter. |`fromWiki`, `filter` |`fieldList`, `tokenKey` |
+|!fetchPlugin |This fetches a plugin from a server setup as a plugin library |`pluginName` |`tokenKey` |
+|!listPlugins |This lists the plugins available on a server setup as a plugin library | |`tokenKey` |
+|!push |This pushes tiddlers to a server setup to accept pushes. |`toWiki`, `filter` |`tokenKey` |
 
 `fromWiki` and `toWiki` use the name of the wiki that Bob uses, the same thing
 that is listed under the wiki listing. `filter` is used to filter tiddlers, for

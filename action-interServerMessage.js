@@ -43,6 +43,7 @@ InterServerMessage.prototype.execute = function() {
   this.tokenKey = this.getAttribute('tokenKey', null);
   this.transfromFilter = this.getAttribute('transfromFilter', null);
   this.pluginName = this.getAttribute('pluginName', null);
+  this.fieldList = this.getAttribute('fieldList', null);
 };
 
 /*
@@ -118,6 +119,20 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
             type: 'application/json'
           }
           $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+          Object.keys(responseData.info).forEach(function(tidTitle) {
+            var fields = {}
+            Object.keys(responseData.info[tidTitle]).forEach(function(field) {
+              if (field !== 'modified' && field !== 'created' && field !== 'tags') {
+                fields[field] = responseData.info[tidTitle][field]
+              } else {
+                var newName = 'import_' + field
+                fields[newName] = responseData.info[tidTitle][field]
+              }
+              fields.title = '$:/state/ImportList/' + tidTitle
+              fields.tags = '[[Import Info]]'
+            })
+            $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+          })
         } else if (self.requestType === 'listPlugins') {
           responseData.forEach(function(pluginData) {
             var fields = {
@@ -156,6 +171,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   } else {
     postString['filter'] = this.filter;
     postString['fromWiki'] = this.fromWiki;
+    postString['fieldList'] = this.fieldList;
   }
   postString = JSON.stringify(postString)
   // send request
