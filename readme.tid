@@ -26,7 +26,7 @@ When fetching a list of fetched tiddlers (or just the list for `fetchList`) is s
 |!tokenKey |If you push or pull to/from a wiki that isn't public this is the localStorage key used by the login widget used to log into the remote server. |
 |!transformFilter |This filter is applied to each of the returned tiddler titles. (optional) |
 |!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
-|!fieldList |A space separated list of field names to return if `requestType` is `fetchList` |
+|!fieldList |A space separated list of field names to return if `requestType` is `fetchList` (optional) |
 
 !! Request Types
 

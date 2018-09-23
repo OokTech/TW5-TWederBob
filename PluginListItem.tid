@@ -1,13 +1,35 @@
 title: $:/plugins/OokTech/TWederBob/PluginListItem
 
-<div style='border:solid 1px black'>
-  <div style='display:inline-block;width:60%;'>
-    Title: <$view field='name'/><br/>
-    Description: <$view field='description'/><br/>
-    Tiddler: <$view field='tiddler_name'/><br/>
-    Version: <$view field='version'/><br/>
+<div
+  style='border:solid 1px black'
+>
+  <div
+    style='display:inline-block;width:60%;'
+  >
+    Title:
+    <$view
+      field='name'
+    />
+    <br/>
+    Description:
+    <$view
+      field='description'
+    />
+    <br/>
+    Tiddler:
+    <$view
+      field='tiddler_name'
+    />
+    <br/>
+    Version:
+    <$view
+      field='version'
+    />
+    <br/>
   </div>
-  <div style='display:inline-block;width:30%;'>
+  <div
+    style='display:inline-block;width:30%;'
+  >
     <$button>
       Install
       <$action-interServerMessage

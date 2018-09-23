@@ -2,6 +2,10 @@ title: $:/plugins/OokTech/TWederBob/changelog
 
 !!Version 0.0.7
 
+* Fix the server urls so they don't have the api component
+
+!!Version 0.0.7
+
 * Add changelog
 * Add a `url` and `wiki` field to preview tiddlers
 

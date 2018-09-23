@@ -63,6 +63,7 @@ Invoke the action associated with this widget
 */
 InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
   var self = this;
+  var serverURL = this.url
   if (self.url.slice(-1) === '/') {
     self.url = self.url.slice(-1);
   }
@@ -131,7 +132,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               fields.title = '$:/state/ImportList/' + tidTitle
               fields.tags = '[[Import Info]]'
               fields.import_wiki = self.fromWiki
-              fields.import_server = self.url
+              fields.import_server = serverURL
             })
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
           })
