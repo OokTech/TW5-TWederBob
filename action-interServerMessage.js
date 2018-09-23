@@ -130,6 +130,8 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               }
               fields.title = '$:/state/ImportList/' + tidTitle
               fields.tags = '[[Import Info]]'
+              fields.import_wiki = self.fromWiki
+              fields.import_server = self.url
             })
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
           })
