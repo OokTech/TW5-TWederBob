@@ -1,0 +1,89 @@
+caption: Import List
+title: $:/plugins/TWederBob/ImportList
+
+Most recently fetched tiddlers:
+
+<$list
+  filter='[list[$:/state/TWederBob/importlist]]'
+>
+
+</$list>
+
+These are tiddlers that currently are waiting to be imported:
+
+<$list
+  filter='[prefix[$:/state/TWederBob/Import/]limit[1]]'
+  variable='dummy'
+  emptyMessage="''There are no tiddlers waiting for import, you can close this tiddler''"
+>
+  <table
+    style='width:100%'
+  >
+    <$list
+      filter='[prefix[$:/state/TWederBob/Import/]]'
+    >
+      <tr>
+        <td>
+          <$list
+            filter='[is[current]removeprefix[$:/state/TWederBob/Import/]]'
+          >
+            <$view
+              field='title'
+            />
+          </$list>
+        </td>
+        <td>
+        <$list
+          filter='[is[current]removeprefix[$:/state/TWederBob/Import/]has[title]]'
+          emptyMessage='No Local Version'
+        >
+          <$link>
+            <$link
+              to=<<currentTiddler>>
+            >
+              Local Version
+            </$link>
+          </$link>
+        </$list>
+        </td>
+        <td>
+          <$link
+            to=<<currentTiddler>>
+          >
+            Import Version
+          </$link>
+        </td>
+        <td>
+          <$button>
+            <$list
+              filter='[is[current]removeprefix[$:/state/TWederBob/Import/]has[title]]'
+              emptyMessage='Discard'
+            >
+              Keep original
+            </$list>
+            <$action-deletetiddler
+              $tiddler=<<currentTiddler>>
+            />
+          </$button>
+          <$button>
+            Use imported
+            <$list
+              filter='[is[current]removeprefix[$:/state/TWederBob/Import/]]'
+              variable=NewTitle
+            >
+              <$action-setfield
+                $tiddler=<<currentTiddler>>
+                $field='title'
+                $value=<<NewTitle>>
+                $timestamp='no'
+              />
+              <$action-deletetiddler
+                $tiddler=<<currentTiddler>>
+              />
+            </$list>
+          </$button>
+        </td>
+      </tr>
+    </$list>
+  </table>
+</$list>

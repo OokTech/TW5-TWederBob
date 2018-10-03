@@ -44,6 +44,7 @@ InterServerMessage.prototype.execute = function() {
   this.transfromFilter = this.getAttribute('transfromFilter', null);
   this.pluginName = this.getAttribute('pluginName', null);
   this.fieldList = this.getAttribute('fieldList', null);
+  this.resolution = this.getAttribute('resolution', 'manual');
 };
 
 /*
@@ -77,6 +78,8 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     self.url += '/api/plugins/list'
   } else if (this.requestType === 'fetchPlugin') {
     self.url += '/api/plugins/fetch/'+this.pluginName
+  } else if (this.requestType === 'pushPlugin') {
+    self.url += '/api/plugins/upload'
   }
   // make the xmlhttprequest object
   var xhr = new XMLHttpRequest()
@@ -96,21 +99,37 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
             responseData.tiddlers[title].fields.modified = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.modified));
             responseData.tiddlers[title].fields.created = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.created));
             // If we have a transform filter apply it to the titles
+            var tiddler = responseData.tiddlers[title];
+            var newTitle = title;
             if (self.transformFilter) {
-              var transformedTitle = ($tw.wiki.filterTiddlers(self.transformFilter,null,new $tw.Tiddler(responseData.tiddlers[title])) || [""])[0];
-      				if(transformedTitle) {
-      					$tw.wiki.addTiddler(new $tw.Tiddler(tiddler,{title: transformedTitle}));
-      				}
-            } else {
-              $tw.wiki.importTiddler(new $tw.Tiddler(responseData.tiddlers[title].fields))
-              var fields = {
-                title: "$:/state/TWederBob/importlist",
-                text: JSON.stringify(responseData.info, null, 2),
-                list: $tw.utils.stringifyList(responseData.list),
-                type: 'application/json'
-              }
-              $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+              newTitle = ($tw.wiki.filterTiddlers(self.transformFilter,null,new $tw.Tiddler(tiddler)) || [""])[0];
             }
+            // Add the tiddler using the desired conflict resolution method
+            if (newTitle) {
+              if (self.resolution === 'force') {
+                // Don't do anything about the title
+              } else if (self.resolution === 'conflict') {
+                // If the tiddler exists already than change the title
+                if ($tw.wiki.tiddlerExists(newTitle)) {
+                  newTitle = '$:/state/TWederBob/Import/' + newTitle;
+                }
+              } else {
+                newTitle = '$:/state/TWederBob/Import/' + newTitle;
+              }
+              $tw.wiki.importTiddler(new $tw.Tiddler(tiddler.fields, {title: newTitle}))
+            }
+            // Save the list of imported tiddlers
+            var fields = {
+              title: "$:/state/TWederBob/importlist",
+              text: JSON.stringify(responseData.info, null, 2),
+              list: $tw.utils.stringifyList(responseData.list),
+              type: 'application/json'
+            }
+            $tw.wiki.addTiddler(new $tw.Tiddler(fields))
+            // we have conflicts so open the conflict list tiddler
+            var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
+            storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
+            $tw.wiki.addTiddler({title: "$:/StoryList", text: "", list: storyList},$tw.wiki.getModificationFields());
           })
         } else if (self.requestType === 'fetchList') {
           var fields = {
@@ -171,10 +190,15 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     })
     postString['toWiki'] = this.toWiki;
     postString['tiddlers'] = tiddlers;
-  } else {
+  } else if (this.fromWiki) {
     postString['filter'] = this.filter;
     postString['fromWiki'] = this.fromWiki;
     postString['fieldList'] = this.fieldList;
+  } else if (this.pluginName) {
+    var plugin = $tw.wiki.getTiddler(this.pluginName)
+    if (plugin) {
+      postString['plugin'] = plugin;
+    }
   }
   postString = JSON.stringify(postString)
   // send request

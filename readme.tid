@@ -13,6 +13,9 @@ Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> req
 
 `<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
 
+After fetching it will open a tiddler that lists the fetched tiddlers and give you a chance to review what was fetched before finishing the import.
+If you wist to skip this and import tiddlers without a review set the `resolution` parameter to `force`.
+
 When fetching a list of fetched tiddlers (or just the list for `fetchList`) is stored in the list field of [[$:/state/TWederBob/importlist]] and other information is put into the text field
 
 !!!Parameters
@@ -27,6 +30,7 @@ When fetching a list of fetched tiddlers (or just the list for `fetchList`) is s
 |!transformFilter |This filter is applied to each of the returned tiddler titles. (optional) |
 |!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
 |!fieldList |A space separated list of field names to return if `requestType` is `fetchList` (optional) |
+|!resolution |The method to use for resolving conflicts (defualt: `manual`) |
 
 !! Request Types
 
@@ -40,8 +44,26 @@ All requests need a `url` and `requestType`. If you are interacting with a serve
 |!fetchPlugin |This fetches a plugin from a server setup as a plugin library |`pluginName` |`tokenKey` |
 |!listPlugins |This lists the plugins available on a server setup as a plugin library | |`tokenKey` |
 |!push |This pushes tiddlers to a server setup to accept pushes. |`toWiki`, `filter` |`tokenKey` |
+|!pushPlugin |This pushes a plugin to a server acting as a plugin library to add the plugin to the library. |`pluginName` |`tokenKey` |
 
 `fromWiki` and `toWiki` use the name of the wiki that Bob uses, the same thing
 that is listed under the wiki listing. `filter` is used to filter tiddlers, for
 fetching it is used on the wiki tiddlers are fetched from, for pushing it picks
 tiddlers to push from the current wiki.
+
+`pluginName` is the name of the plugin to fetch if the `requestType` is
+`fetchPlugin`, it is the name of the local plugin to push if `requestType` is
+`pushPlugin`
+
+!! Conflict Resolution
+
+There are there options for conflict resolution:
+
+* `manual` every imported tiddler is saved in a temporaty tiddler so you can
+  accept or reject each one
+* `conflict` if the imported tiddler would not overwrite an existing tiddler in
+  is created, otherwise if the imported tiddler is different than the existing
+  tiddler it is added to the list of conflicting tiddlers presented to be
+  accepted or rejected
+* `force` all imported tiddlers are saved regardless of if they overwirte an
+  existing tiddler or not.
