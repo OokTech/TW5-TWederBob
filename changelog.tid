@@ -1,5 +1,12 @@
 title: $:/plugins/OokTech/TWederBob/changelog
 
+!!Version 0.1.1
+
+* Add noPreview option to prevent the import preview tiddler from opening
+
+!!Version 0.1.0
+
+
 !!Version 0.0.7
 
 * Fix the server urls so they don't have the api component

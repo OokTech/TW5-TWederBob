@@ -31,6 +31,7 @@ When fetching a list of fetched tiddlers (or just the list for `fetchList`) is s
 |!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
 |!fieldList |A space separated list of field names to return if `requestType` is `fetchList` (optional) |
 |!resolution |The method to use for resolving conflicts (defualt: `manual`) |
+|!noPreview |If set to `true` this prevents the import preview and summary tiddler from opening after a fetch. (default: `false`) (optional) |
 
 !! Request Types
 

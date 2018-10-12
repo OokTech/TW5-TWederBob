@@ -45,6 +45,7 @@ InterServerMessage.prototype.execute = function() {
   this.pluginName = this.getAttribute('pluginName', null);
   this.fieldList = this.getAttribute('fieldList', null);
   this.resolution = this.getAttribute('resolution', 'manual');
+  this.noPreview = this.getAttribute('noPreview', 'false');
 };
 
 /*
@@ -126,10 +127,12 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               type: 'application/json'
             }
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
-            // we have conflicts so open the conflict list tiddler
-            var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
-            storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
-            $tw.wiki.addTiddler({title: "$:/StoryList", text: "", list: storyList},$tw.wiki.getModificationFields());
+            if (this.noPreview === 'true') {
+              // we have conflicts so open the conflict list tiddler
+              var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
+              storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
+              $tw.wiki.addTiddler({title: "$:/StoryList", text: "", list: storyList},$tw.wiki.getModificationFields());
+            }
           })
         } else if (self.requestType === 'fetchList') {
           var fields = {
