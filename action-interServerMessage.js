@@ -127,7 +127,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               type: 'application/json'
             }
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
-            if (this.noPreview === 'true') {
+            if (this.noPreview !== 'true') {
               // we have conflicts so open the conflict list tiddler
               var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
               storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
