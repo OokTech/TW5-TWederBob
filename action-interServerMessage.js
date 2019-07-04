@@ -127,7 +127,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               type: 'application/json'
             }
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
-            if (this.noPreview !== 'true') {
+            if (self.noPreview !== 'true') {
               // we have conflicts so open the conflict list tiddler
               var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
               storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
@@ -175,7 +175,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
           $tw.wiki.addTiddler(new $tw.Tiddler(responseData))
         }
       } catch (e) {
-        console.log('Can\'t parse response!')
+        console.log('Can\'t parse response!', e)
       }
     }
   }

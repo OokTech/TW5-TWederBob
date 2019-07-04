@@ -1,5 +1,9 @@
 title: $:/plugins/OokTech/TWederBob/changelog
 
+!!Version 0.1.2
+
+* Fix a bug that broke everything
+
 !!Version 0.1.1
 
 * Add noPreview option to prevent the import preview tiddler from opening
