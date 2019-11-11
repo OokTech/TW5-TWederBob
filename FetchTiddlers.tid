@@ -1,0 +1,49 @@
+title: $:/plugins/OokTech/TWederBob/FetchTiddlers
+
+Pick Server:
+<$select
+  tiddler='$:/state/TWederBob/FetchTiddlers/SelectedServer'
+>
+  <$list
+    filter='[tag[Bob Tiddler Server]]'
+  >
+    <option
+      value={{!!url}}
+    >
+      <$view
+        field='caption'
+      >
+        <$view
+          field='title'
+        />
+      </$view>
+    </option>
+  </$list>
+  <option
+    value='https://ooktech.xyz:8443'
+  >
+    OokTech Public Test
+  </option>
+</$select>
+
+Filter:
+<$edit-text
+class='tc-edit-texteditor'
+tiddler='$:/state/TWederBob/FetchTiddlers/Filter'
+field='filter'
+/>
+<$button>
+  Fetch Tiddlers
+  <$reveal
+    type='nomatch'
+    state='$:/state/TWederBob/FetchTiddlers/SelectedServer'
+    text=''
+  >
+    <$action-interServerMessage
+      url={{$:/state/TWederBob/FetchTiddlers/SelectedServer}}
+      requestType='fetch'
+      filter={{$:/state/TWederBob/FetchTiddlers/Filter!!filter}}
+      fromWiki='Public'
+    />
+  </$reveal>
+</$button>

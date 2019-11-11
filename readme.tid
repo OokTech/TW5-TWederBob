@@ -2,42 +2,49 @@ title: $:/plugins/OokTech/TWederBob/readme
 
 ! TWederBob
 
-This is a plugin for adding some inter-server communication with Bob wikis.
-Currently it adds one widget: `action-interServerMessage`.
+''TWederBob'' is a plugin for adding some inter-server communication between Bob wikis. Currently it adds one widget: `action-interServerMessage`.
 
-To install this plugin you can drag and drop it into a wiki from https://www.ooktech.xyz:8443/Public#%24%3A%2Fplugins%2FOokTech%2FTWederBob
+''To install'' this plugin you can drag and drop it into a wiki from https://www.ooktech.xyz:8443/Public#%24%3A%2Fplugins%2FOokTech%2FTWederBob
 
 !! action-interServerMessage widget
 
-Usage: `<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
+''Usage'':<br>
 
-`<$action-interServerMessage url=http://url.com filter=<<somefilter>> requestType='fetch' fromWiki='FetchWiki' tokenKey='localStorageKey'/>`
+```
+<$action-interServerMessage
+  url='http://url.com'
+  filter=<<somefilter>>
+  requestType='fetch'
+  fromWiki='FetchWiki'
+  tokenKey='localStorageKey'
+/>
+```
 
 After fetching it will open a tiddler that lists the fetched tiddlers and give you a chance to review what was fetched before finishing the import.
-If you wist to skip this and import tiddlers without a review set the `resolution` parameter to `force`.
+If you wish to skip this and import tiddlers without a review set the `resolution` parameter to `force`.
 
-When fetching a list of fetched tiddlers (or just the list for `fetchList`) is stored in the list field of [[$:/state/TWederBob/importlist]] and other information is put into the text field
+A list of the fetched tiddlers (or just the list for `fetchList`) is stored in the //list// field of [[$:/state/TWederBob/importlist]]. Other information is put into the //text// field.
 
 !!!Parameters
+
+All requests need a `url` and `requestType`. If you are interacting with a server that requires a login you also need to set the `tokenKey`
 
 |!Parameter |!Description |
 |!url |The url of the server. |
 |!requestType |The type of request. See below for details. |
-|!filter |The filter that determines the tiddlers to fetch if `requestType` is `fetch` or the tiddlers to send if `requestType` is `push` |
-|!fromWiki |The wiki to pull from if `requestType` is `fetch` |
-|!toWiki |The wiki to push tiddlers to if `requestType` is `push` |
+|!filter |The filter that determines the tiddlers to fetch if `requestType=fetch` or the tiddlers to send if `requestType=push` |
+|!fromWiki |The wiki to pull from if `requestType=fetch` |
+|!toWiki |The wiki to push tiddlers to if `requestType=push` |
 |!tokenKey |If you push or pull to/from a wiki that isn't public this is the localStorage key used by the login widget used to log into the remote server. |
 |!transformFilter |This filter is applied to each of the returned tiddler titles. (optional) |
-|!pluginName |The plugin to fetch if `requestType` is `fetchPlugin` |
-|!fieldList |A space separated list of field names to return if `requestType` is `fetchList` (optional) |
+|!pluginName |The plugin to fetch if `requestType=fetchPlugin` |
+|!fieldList |A space separated list of field names to return if `requestType=fetchList` (optional) |
 |!resolution |The method to use for resolving conflicts (defualt: `manual`) |
 |!noPreview |If set to `true` this prevents the import preview and summary tiddler from opening after a fetch. (default: `false`) (optional) |
 
 !! Request Types
 
-These are the different request types and their inputs:
-
-All requests need a `url` and `requestType`. If you are interacting with a server that requires a login you also need to set the `tokenKey`
+The `requestType` parameter can be of different types and with different inputs:
 
 |!Request Type |!Description |!Needed Inputs |!Optional Inputs |
 |!fetch |This fetches tiddlers from a Bob server that allows fetching. |`fromWiki`, `filter` |`transformFilter`, `tokenKey` |
@@ -48,10 +55,12 @@ All requests need a `url` and `requestType`. If you are interacting with a serve
 |!pushPlugin |This pushes a plugin to a server acting as a plugin library to add the plugin to the library. |`pluginName` |`tokenKey` |
 
 `fromWiki` and `toWiki` use the name of the wiki that Bob uses, the same thing
-that is listed under the wiki listing. `filter` is used to filter tiddlers, for
+that is listed under the wiki listing.
+<br>
+`filter` is used to filter tiddlers, for
 fetching it is used on the wiki tiddlers are fetched from, for pushing it picks
 tiddlers to push from the current wiki.
-
+<br>
 `pluginName` is the name of the plugin to fetch if the `requestType` is
 `fetchPlugin`, it is the name of the local plugin to push if `requestType` is
 `pushPlugin`
@@ -60,11 +69,11 @@ tiddlers to push from the current wiki.
 
 There are there options for conflict resolution:
 
-* `manual` every imported tiddler is saved in a temporaty tiddler so you can
+* `manual` every imported tiddler is saved in a temporary tiddler so you can
   accept or reject each one
-* `conflict` if the imported tiddler would not overwrite an existing tiddler in
+* `conflict` if the imported tiddler would not overwrite an existing tiddler if
   is created, otherwise if the imported tiddler is different than the existing
   tiddler it is added to the list of conflicting tiddlers presented to be
   accepted or rejected
-* `force` all imported tiddlers are saved regardless of if they overwirte an
+* `force` all imported tiddlers are saved regardless of if they overwrite an
   existing tiddler or not.
