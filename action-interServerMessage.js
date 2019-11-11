@@ -12,9 +12,9 @@ Action widget that queries a server for a list of tiddlers that match a filter.
 /*global $tw: false */
 "use strict";
 
-var Widget = require("$:/core/modules/widgets/widget.js").widget;
+const Widget = require("$:/core/modules/widgets/widget.js").widget;
 
-var InterServerMessage = function(parseTreeNode,options) {
+const InterServerMessage = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
 };
 
@@ -52,7 +52,7 @@ InterServerMessage.prototype.execute = function() {
 Refresh the widget by ensuring our attributes are up to date
 */
 InterServerMessage.prototype.refresh = function(changedTiddlers) {
-	var changedAttributes = this.computeAttributes();
+	const changedAttributes = this.computeAttributes();
 	if(Object.keys(changedAttributes).length) {
 		this.refreshSelf();
 		return true;
@@ -64,8 +64,8 @@ InterServerMessage.prototype.refresh = function(changedTiddlers) {
 Invoke the action associated with this widget
 */
 InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
-  var self = this;
-  var serverURL = this.url
+  const self = this;
+  const serverURL = this.url
   if (self.url.slice(-1) === '/') {
     self.url = self.url.slice(-1);
   }
@@ -83,7 +83,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     self.url += '/api/plugins/upload'
   }
   // make the xmlhttprequest object
-  var xhr = new XMLHttpRequest()
+  const xhr = new XMLHttpRequest()
   // setup request object
   xhr.open('POST', self.url, true)
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
@@ -93,15 +93,15 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     if (this.responseText && this.status == "200") {
       // handle the response!
       try {
-        var responseData = JSON.parse(this.responseText)
+        const responseData = JSON.parse(this.responseText)
         if (self.requestType === 'fetch') {
           Object.keys(responseData.tiddlers).forEach(function(title) {
             // Fix the modified and created fields, otherwise they are just NAN
             responseData.tiddlers[title].fields.modified = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.modified));
             responseData.tiddlers[title].fields.created = $tw.utils.stringifyDate(new Date(responseData.tiddlers[title].fields.created));
             // If we have a transform filter apply it to the titles
-            var tiddler = responseData.tiddlers[title];
-            var newTitle = title;
+            const tiddler = responseData.tiddlers[title];
+            let newTitle = undefined;
             if (self.transformFilter) {
               newTitle = ($tw.wiki.filterTiddlers(self.transformFilter,null,new $tw.Tiddler(tiddler)) || [""])[0];
             }
@@ -120,7 +120,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
               $tw.wiki.importTiddler(new $tw.Tiddler(tiddler.fields, {title: newTitle}))
             }
             // Save the list of imported tiddlers
-            var fields = {
+            const fields = {
               title: "$:/state/TWederBob/importlist",
               text: JSON.stringify(responseData.info, null, 2),
               list: $tw.utils.stringifyList(responseData.list),
@@ -129,13 +129,13 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
             $tw.wiki.addTiddler(new $tw.Tiddler(fields))
             if (self.noPreview !== 'true') {
               // we have conflicts so open the conflict list tiddler
-              var storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
+              let storyList = $tw.wiki.getTiddler('$:/StoryList').fields.list
               storyList = "$:/plugins/TWederBob/ImportList " + $tw.utils.stringifyList(storyList)
               $tw.wiki.addTiddler({title: "$:/StoryList", text: "", list: storyList},$tw.wiki.getModificationFields());
             }
           })
         } else if (self.requestType === 'fetchList') {
-          var fields = {
+          let fields = {
             title: "$:/state/TWederBob/importlist",
             text: JSON.stringify(responseData.info, null, 2),
             list: $tw.utils.stringifyList(responseData.list),
@@ -143,12 +143,12 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
           }
           $tw.wiki.addTiddler(new $tw.Tiddler(fields))
           Object.keys(responseData.info).forEach(function(tidTitle) {
-            var fields = {}
+            fields = {}
             Object.keys(responseData.info[tidTitle]).forEach(function(field) {
               if (field !== 'modified' && field !== 'created' && field !== 'tags') {
                 fields[field] = responseData.info[tidTitle][field]
               } else {
-                var newName = 'import_' + field
+                const newName = 'import_' + field
                 fields[newName] = responseData.info[tidTitle][field]
               }
               fields.title = '$:/state/ImportList/' + tidTitle
@@ -160,7 +160,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
           })
         } else if (self.requestType === 'listPlugins') {
           responseData.forEach(function(pluginData) {
-            var fields = {
+            const fields = {
               title: '$:/pluginData/Listing/'+pluginData.tiddlerName,
               name: pluginData.name,
               description: pluginData.description,
@@ -180,14 +180,14 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     }
   }
   // Make post body
-  var token = localStorage.getItem(this.tokenKey);
-  var postString = {
+  const token = localStorage.getItem(this.tokenKey);
+  let postString = {
     'type': this.requestType,
     'token': token
   }
   if (this.toWiki) {
-    var list = $tw.wiki.filterTiddlers(this.filter);
-    var tiddlers = []
+    const list = $tw.wiki.filterTiddlers(this.filter);
+    const tiddlers = []
     list.forEach(function(title) {
       tiddlers.push($tw.wiki.getTiddler(title))
     })
@@ -198,7 +198,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
     postString['fromWiki'] = this.fromWiki;
     postString['fieldList'] = this.fieldList;
   } else if (this.pluginName) {
-    var plugin = $tw.wiki.getTiddler(this.pluginName)
+    const plugin = $tw.wiki.getTiddler(this.pluginName)
     if (plugin) {
       postString['plugin'] = plugin;
     }

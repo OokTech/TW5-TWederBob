@@ -25,12 +25,37 @@ Pick Server:
     OokTech Public Test
   </option>
 </$select>
+or add a server:
+
+Server Name: <$edit-text
+  tiddler='$:/temp/twederbob/addserver'
+  field='server_url'
+/>
+
+Server URL: <$edit-text
+  tiddler='$:/temp/twederbob/addserver'
+  field='server_url'
+/>
+
+<$button>
+  Add Server
+  <$list
+    filter='[[$:/temp/twederbob/addserver]has[server_url]has[server_name]get[server_name]addprefix[$:/data/TWederBob/server/]]'
+    variable=serverTiddlerName
+  >
+    <$action-setfield
+      $tiddler=<<serverTiddlerName>>
+      tags=[[Bob Tiddler Server]]
+      url={{$:/temp/twederbob/addserver!!server_url}}
+    />
+  </$list>
+</$button>
 
 Filter:
 <$edit-text
-class='tc-edit-texteditor'
-tiddler='$:/state/TWederBob/FetchTiddlers/Filter'
-field='filter'
+  class='tc-edit-texteditor'
+  tiddler='$:/state/TWederBob/FetchTiddlers/Filter'
+  field='filter'
 />
 <$button>
   Fetch Tiddlers
