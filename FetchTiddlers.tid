@@ -45,7 +45,7 @@ Server URL: <$edit-text
   >
     <$action-setfield
       $tiddler=<<serverTiddlerName>>
-      tags=[[Bob Tiddler Server]]
+      tags="""[[Bob Tiddler Server]]"""
       url={{$:/temp/twederbob/addserver!!server_url}}
       caption={{$:/temp/twederbob/addserver!!server_name}}
     />
