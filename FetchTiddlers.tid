@@ -29,7 +29,7 @@ or add a server:
 
 Server Name: <$edit-text
   tiddler='$:/temp/twederbob/addserver'
-  field='server_url'
+  field='server_name'
 />
 
 Server URL: <$edit-text
