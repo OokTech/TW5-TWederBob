@@ -47,6 +47,12 @@ Server URL: <$edit-text
       $tiddler=<<serverTiddlerName>>
       tags=[[Bob Tiddler Server]]
       url={{$:/temp/twederbob/addserver!!server_url}}
+      caption={{$:/temp/twederbob/addserver!!server_name}}
+    />
+    <$action-setfield
+      $tiddler='$:/temp/twederbob/addserver'
+      server_name=''
+      server_url=''
     />
   </$list>
 </$button>
@@ -57,6 +63,15 @@ Filter:
   tiddler='$:/state/TWederBob/FetchTiddlers/Filter'
   field='filter'
 />
+
+From wiki:
+<$edit-text
+  class='tc-edit-texteditor'
+  tiddler='$:/temp/twederbob/fromwiki'
+  field='from_wiki'
+  placeholder='RootWiki'
+/>
+
 <$button>
   Fetch Tiddlers
   <$reveal
@@ -68,7 +83,7 @@ Filter:
       url={{$:/state/TWederBob/FetchTiddlers/SelectedServer}}
       requestType='fetch'
       filter={{$:/state/TWederBob/FetchTiddlers/Filter!!filter}}
-      fromWiki='Public'
+      fromWiki={{$:/temp/twederbob/fromwiki!!from_wiki}}
     />
   </$reveal>
 </$button>
