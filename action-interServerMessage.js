@@ -175,7 +175,7 @@ InterServerMessage.prototype.invokeAction = function(triggeringWidget,event) {
           $tw.wiki.addTiddler(new $tw.Tiddler(responseData))
         }
       } catch (e) {
-        console.log('Can\'t parse response!')
+        console.log('Can\'t parse response!',e)
       }
     }
   }

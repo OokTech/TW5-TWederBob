@@ -4,6 +4,21 @@ Pick Server:
 <$select
   tiddler='$:/state/TWederBob/GetPlugins/SelectedServer'
 >
+  <$list
+    filter='[tag[Bob Plugin Server]]'
+  >
+    <option
+      value={{!!url}}
+    >
+      <$view
+        field='caption'
+      >
+        <$view
+          field='title'
+        />
+      </$view>
+    </option>
+  </$list>
   <option
     value='https://ooktech.xyz:8443'
   >
